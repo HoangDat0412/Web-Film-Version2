@@ -1,5 +1,4 @@
 import { service } from "@/service/baseService";
-import axios from "axios";
 import { defineStore } from "pinia";
 // import { TOKEN } from "@/utils/config";
 export const useFilmStore = defineStore("film", {
@@ -22,10 +21,7 @@ export const useFilmStore = defineStore("film", {
   actions: {
     async setListFilm(){
       try {
-        const result = await axios({
-          method:"GET",
-          url:"http://localhost:4000/api/v1/films/film"
-      })
+        const result = await service.get(`/film`)
       this.listFilmUser = result.data
       } catch (error) {
         console.log(error);
