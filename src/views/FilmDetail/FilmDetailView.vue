@@ -5,24 +5,29 @@ import { useFilmStore } from '@/stores/film';
 import { useRateStore } from '@/stores/rate'
 import { useRoute } from 'vue-router';
 import StarRating from 'vue-star-rating'
+import { LINKBE } from '@/utils/config';
 const film = useFilmStore()
 const rate = useRateStore()
 const route = useRoute()
-console.log("id",route.params.id);
 const imgpath = ref("")
+const trailerpath = ref("")
 onBeforeMount(async ()=>{
   await film.setFilmDetail(route.params.id)
   await rate.setTotalPoint(route.params.id)
   await film.setListFilm()
-  imgpath.value = `http://localhost:4000/${film.filmDetail?.img}`
-})
- 
+  let img = film.filmDetail?.img ? film.filmDetail.img : "/usr/src/app/public/film/1708399031409-transformers.jpg"
+  img = img.slice(img.indexOf("/public"));
+  imgpath.value = `${LINKBE}${img}`
+  let trailer = film.filmDetail?.trailer ? film.filmDetail?.trailer : "/usr/src/app/public/film/1708399046429-trailernvbkt.mp4"
+  trailer = trailer.slice(trailer.indexOf("/public"));
+  trailerpath.value = `${LINKBE}${trailer}`
 
+})
 </script>
 
 <template>
   <main>
-    <div class="row">
+    <div class="row pt-5">
       <div class="col-12 col-lg-8">
         <div class="row ">
           <div class="col-12 col-sm-5 mb-5 mb-sm-0 filmdetail_wrap " >
@@ -63,7 +68,7 @@ onBeforeMount(async ()=>{
             <h4 class="mt-4">{{ film.filmDetail?.name }}</h4>
             <p>{{ film.filmDetail?.des }}</p>
             <h3 class="mt-5" style="color: #ff9658;">Trailer</h3>
-            <iframe class="metaframe rptss mt-4" :src="`http://localhost:4000/${film.filmDetail?.trailer}`"
+            <iframe class="metaframe rptss mt-4" :src="trailerpath"
               frameborder="0" scrolling="no" allow="autoplay; encrypted-media" allowfullscreen="true" width="100%"
               height="350px"></iframe>
           </div>

@@ -11,7 +11,9 @@ export const useFilmStore = defineStore("film", {
 
     deleteResult:true,
     updateResult:true,
-    createResult:true
+    createResult:true,
+
+    loading:false
   }),
   getters: {
     getListFilmSearch(state){
@@ -32,7 +34,6 @@ export const useFilmStore = defineStore("film", {
         const result = await service.get(`/film/detail/${id}`)
         if(result.status === 200){
           this.filmDetail = result.data
-          console.log("filmDetail",result.data);
         }
       } catch (error) {
         console.log(error);
@@ -53,7 +54,7 @@ export const useFilmStore = defineStore("film", {
       try {
         const result = await service.post(`/film/search`,data);
         if(result.status === 200){
-          this.listFilmSearch = result?.data
+          this.listFilmSearch = [... result.data]
         }
       }catch(err){
         console.log(err);
@@ -155,15 +156,19 @@ export const useFilmStore = defineStore("film", {
     },
     async uploadFilm(id,data){
       try {
+        this.loading = true
         const result = await service.upload(`/film/uploadfilm/${id}`,data)
         if(result.status === 201){
           this.setFilmDetail(id)
+          this.loading = false
           alert("Upload success !")
+         
         }else{
+          this.loading = false
           alert("Upload false !")
         }
       } catch (error) {
-        console.log(error);
+        this.loading = false
         alert("Upload false !")
       }
     }

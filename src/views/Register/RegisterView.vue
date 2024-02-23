@@ -12,10 +12,10 @@ import router from '@/router';
     const errorUserName = ref("");
 
     const handleRegister = async ()=>{
-        !checkNull(email.value) ? errorEmail.value = "email must is not null" : errorEmail.value = "";
-        !checkNull(passWord.value) ? errorPassword.value = "passWord must is not null" : errorPassword.value = "";
-        !checkNull(userName.value) ? errorUserName.value = "userName must is not null" : errorUserName.value = "";
-        !ValidateEmail (email.value) ? errorEmail.value ="email is invalid" : errorEmail.value =""
+        !checkNull(email.value) ? errorEmail.value = "email không được bỏ trống" : errorEmail.value = "";
+        !checkNull(passWord.value) ? errorPassword.value = "passWord không được bỏ trống" : errorPassword.value = "";
+        !checkNull(userName.value) ? errorUserName.value = "userName không được bỏ trống" : errorUserName.value = "";
+        !ValidateEmail (email.value) ? errorEmail.value ="email không tồn tại" : errorEmail.value =""
 
         const data = {
             email: email.value,
@@ -29,7 +29,7 @@ import router from '@/router';
                 alert("Success !");
                 router.push({path:"/login"})
             } else {
-                alert("Faile !");
+                alert("False !");
             }
             
         }
@@ -82,7 +82,7 @@ import router from '@/router';
 
                         </div>
                         <button class="btn btn-success mt-3 container" @click.prevent="()=> handleRegister()">
-                            Register
+                            Đăng Ký
                         </button>
 
                     </form>

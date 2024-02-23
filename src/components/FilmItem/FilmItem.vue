@@ -1,10 +1,14 @@
 <script setup>
+import { LINKBE } from "@/utils/config";
 import "./filmitem.scss"
 
 const props = defineProps(['film'])
-const film = props.film
-const imgpath = `http://localhost:4000/${film?.img}`
-console.log(imgpath);
+let film = props.film
+let img = film.img ? film.img : "/usr/src/app/public/film/1708399031409-transformers.jpg"
+img = img.slice(img.indexOf("/public"));
+let imgpath = `${LINKBE}${img}`
+
+
 </script>
 
 <template>

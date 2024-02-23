@@ -8,13 +8,14 @@ import { ref,onBeforeMount } from 'vue';
 const actorName = ref("")
 const actorNameErr = ref("")
 const handleAddActor = async ()=>{
-    !checkNull(actorName.value) ? actorNameErr.value = "actor name must is not null" : actorNameErr.value = "";
+    !checkNull(actorName.value) ? actorNameErr.value = "actor name không được bỏ trống" : actorNameErr.value = "";
     const flag = checkNull(actorName.value);
     if(flag){
         await film.createActor({
             filmId:route.params.id,
             actorName:actorName.value
         })
+        actorName.value=""
     }
 }
 onBeforeMount(async ()=>{
@@ -47,7 +48,7 @@ onBeforeMount(async ()=>{
         </table>
       </div>
       <form class="mt-5">
-        <input type="text" name='actorName' v-model="actorName"  className="form-control" />
+        <input type="text" name='actorName' v-model="actorName"  @keyup.enter="()=> handleAddActor()"  className="form-control" />
         <label className="form-label" >Actor Name</label>
          <p style="color:red">{{ actorNameErr }}</p>
         <button className='btn btn-success' type='button' @click="()=> handleAddActor()" >Add Actor</button>

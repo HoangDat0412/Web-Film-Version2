@@ -2,7 +2,6 @@
     import { ref } from 'vue'
     import { checkNull,ValidateEmail } from "@/validation/validation";
     import {useUserStore } from "@/stores/user";
-import router from '@/router';
     const user = useUserStore()
     const email = ref("")
     const errorEmail = ref("")
@@ -10,19 +9,18 @@ import router from '@/router';
     const errorPassword = ref("")
 
     const handleLogin = async ()=>{
-        console.log("email",email.value);
-        console.log("password",passWord.value);
+
         if(!checkNull(email.value)){
-            errorEmail.value = "email must is not null"
+            errorEmail.value = "email không được bỏ trống"
         }else{
             errorEmail.value = ""
         }
         if(!checkNull(passWord.value)){
-            errorPassword.value = "password must is not null"
+            errorPassword.value = "password không được bỏ trống"
         }else{
             errorPassword.value = ""
         }
-        !ValidateEmail (email.value) ? errorEmail.value ="email is invalid" : errorEmail.value =""
+        !ValidateEmail (email.value) ? errorEmail.value ="email không tồn tại" : errorEmail.value =""
 
         const data = {
             email:email.value,
@@ -31,11 +29,9 @@ import router from '@/router';
         const flag = checkNull(email.value) && checkNull(passWord.value) && ValidateEmail(email.value)
         if(flag){
             await user.login(data)
-            router.push({path:"/",name:"home"})
         }
     }
 </script>
-
 <template>
   <main>
     <div className='jss2526'>
@@ -51,7 +47,7 @@ import router from '@/router';
                 <div>
                     <form>
                         <div className='form-group position-relative mb-2'>
-                            <label htmlFor="email" >Tài Khoản</label>
+                            <label htmlFor="email" >Email</label>
                             <input
                                 name="email"
                                 className="form-control"
@@ -72,7 +68,7 @@ import router from '@/router';
 
                         </div>
                         <button class="btn btn-success mt-3 container" @click.prevent="()=> handleLogin()">
-                            Log in
+                            Đăng Nhập 
                         </button>
 
                         <RouterLink to="/register" class="mt-3">

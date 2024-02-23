@@ -7,7 +7,8 @@ export const useCheckoutStore = defineStore("checkout", {
     totalPrice:0,
     checkoutResult : false,
     userCheckoutList:[],
-    totalPriceUser : 0
+    totalPriceUser : 0,
+    deadline : true
   }),
   getters: {
     
@@ -58,6 +59,21 @@ export const useCheckoutStore = defineStore("checkout", {
              totalmoney += item.moneyPay
           })
           this.totalPriceUser = totalmoney
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async checkDeadline(){
+      try {
+        const result = await service.get(`/checkout/checkdeadline`)
+        if(result.status === 200){
+          if(result?.data === true){
+            this.deadline = true
+          }else{
+            // alert("Hết thời hạn sử dụng tài khoản vip, bạn hãy thanh toán để tiếp tục xem phim")
+            this.deadline = false
+          }
         }
       } catch (error) {
         console.log(error);

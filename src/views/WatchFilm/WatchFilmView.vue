@@ -3,19 +3,31 @@ import TrendingItem from '@/components/TrendingItem/TrendingItem.vue';
 import { useFilmStore } from '@/stores/film';
 import { useRateStore } from '@/stores/rate';
 import { useCommentStore } from "@/stores/comment"
-import { onBeforeMount } from 'vue';
+import { onBeforeMount,watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { ref } from 'vue';
 import StarRating from 'vue-star-rating'
 import { checkNull } from '@/validation/validation';
 import { useFavouriteFilmStore } from '@/stores/favouritefilm';
+import { LINKBE } from '@/utils/config';
+import { useUserStore } from '@/stores/user';
+import router from '@/router';
 const route = useRoute()
 const film = useFilmStore();
 const rate = useRateStore()
 const favouriteFilm = useFavouriteFilmStore()
 const commentStore = useCommentStore()
-
+const user = useUserStore()
+const srcpath = ref("")
+watchEffect(async ()=>{
+  await user.getUserInformation()
+  if(user.userInformation.userType !=="ADMIN" && user.userInformation.userType !=="STAFF" && user.userInformation.userType !=="CLIENT"){
+    alert("bạn cần nâng cấp tài khoản để xem phim")
+    router.push("/checkout")
+  }
+})
 onBeforeMount(async()=>{
+
   await film.setFilmWatching(route.params.id)
   await rate.setTotalPoint(route.params.id)
   await commentStore.getAllComment(route.params.id)
@@ -23,6 +35,10 @@ onBeforeMount(async()=>{
   await favouriteFilm.getFavouriteFilm()
   favouriteFilm.checkFilmFavourite(route.params.id)
   rating.value = rate.totalPoint
+  let src = film.filmWatching?.src ? film.filmWatching?.src : "/usr/src/app/public/film/1708399046429-trailernvbkt.mp4"
+  src = src.slice(src.indexOf("/public"));
+  srcpath.value = `${LINKBE}${src}`
+
 })
 
 
@@ -37,6 +53,7 @@ const handleComment = async () => {
       comment: comment.value
     }
     await commentStore.createComment(data)
+    comment.value = ""
   }
 }
 const setRating = async () => {
@@ -54,14 +71,11 @@ const setRating = async () => {
 <template>
   <main>
     <div>
-      <iframe class="metaframe rptss mt-4" :src="`http://localhost:4000/${film.filmWatching?.src}`" frameborder="0"
-        scrolling="no" allow="autoplay; encrypted-media" allowfullscreen="true" width="100%" height="600px"></iframe>
-
+      <iframe class="mt-4" :src="srcpath" frameborder="0" scrolling="no" allow="autoplay; encrypted-media" allowfullscreen="true" width="100%" height="500px"></iframe>
       <div class="mt-4">
         <h3>Rate (lượt đánh giá : {{ rate?.numberRate }}) </h3>
         <StarRating v-model:rating="rating" @update:rating="setRating" :increment="0.5" />
       </div>
-
       <div class="mt-4">
         <button class="btn" @click="favouriteFilm.createAndDeleteFavouriteFilm({
           filmId:parseInt(route.params.id)
@@ -71,7 +85,6 @@ const setRating = async () => {
         </button>
       </div>
     </div>
-
     <div class="row mt-5">
       <div class="col-12 col-lg-8 ">
         <div>
@@ -83,7 +96,7 @@ const setRating = async () => {
         <div class="comment p-3" style="background-color: white;">
 
           <div class=" pb-4">
-            <textarea class="form-control" v-model="comment" placeholder="Viết bình luận ..." rows="3"></textarea>
+            <textarea class="form-control" v-model="comment" @keyup.enter="handleComment" placeholder="Viết bình luận ..." rows="3"></textarea>
             <button class="btn" style="background-color: #9cb4d8;" @click="handleComment">Comment</button>
           </div>
 

@@ -41,6 +41,7 @@ onBeforeMount(async ()=>{
             
 //         }
 // }
+
 </script>
 
 <template>
@@ -110,6 +111,11 @@ onBeforeMount(async ()=>{
                 </div>
             </div>
 
+            <div v-if="user?.userInformation?.userType===`ADMIN` || user?.userInformation?.userType ===`STAFF`">
+              <RouterLink to="/admin" class="btn btn-success">
+                GO TO ADMIN PAGE
+            </RouterLink>
+            </div>
         </div>
     </main>
 </template>

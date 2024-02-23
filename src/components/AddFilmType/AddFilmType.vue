@@ -8,13 +8,14 @@ import { ref,onBeforeMount } from 'vue';
 const typeName = ref("")
 const typeNameErr = ref("")
 const handleAddFilmtype = async ()=>{
-    !checkNull(typeName.value) ? typeNameErr.value = "typeName name must is not null" : typeNameErr.value = "";
+    !checkNull(typeName.value) ? typeNameErr.value = "typeName name không được bỏ trống" : typeNameErr.value = "";
     const flag = checkNull(typeName.value);
     if(flag){
         await film.createFilmType({
             filmId:route.params.id,
             typeName:typeName.value
         })
+        typeName.value =""
     }
 }
 onBeforeMount(async ()=>{
@@ -46,7 +47,7 @@ onBeforeMount(async ()=>{
         </table>
       </div>
       <form class="mt-5">
-        <input type="text" name='actorName' v-model="typeName"  className="form-control" />
+        <input type="text" name='actorName' v-model="typeName" @keyup.enter="()=> handleAddFilmtype()" className="form-control" />
         <label className="form-label" >Type Name</label>
          <p style="color:red">{{ typeNameErr }}</p>
         <button className='btn btn-success' type='button' @click="()=> handleAddFilmtype()" >Add FilmType</button>

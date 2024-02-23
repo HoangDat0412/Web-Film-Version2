@@ -21,6 +21,7 @@ watchEffect(async ()=>{
             <th scope="col">Account Number</th>
             <th scope="col">Bank</th>
             <th scope="col">Money Pay</th>
+            <th scope="col">Deadline</th>
             <th scope="col">Create At</th>
           </tr>
         </thead>
@@ -31,6 +32,7 @@ watchEffect(async ()=>{
                 <td>{{item?.accountNumber}}</td>
                 <td>{{item?.bank}}</td>
                 <td>{{item?.moneyPay}}</td>
+                <td>{{item?.deadline}}</td>
                 <td>{{item?.createdAt}}</td>
               </tr>
 

@@ -1,22 +1,24 @@
 <script setup>
 import "./header.scss"
-import {  watchEffect,ref } from 'vue'
+import { ref } from 'vue'
 import {useUserStore } from "@/stores/user";
 import { useFilmStore } from "@/stores/film";
 import router from "@/router";
 const user = useUserStore()
 const film = useFilmStore()
+import { useRoute } from 'vue-router';
+const route = useRoute()
 
-  watchEffect(async ()=>{
-    await user.getUserInformation()
-  })
 const search = ref("");
 const handleSearch = async ()=>{
-  console.log("search value",search.value);
    await film.searchFilm({
     name:search.value
   })
+  search.value = ""
+ if(route.name !== "search"){
+  console.log("redireact");
   router.push({path:"/search"})
+ }
 }
 
 
@@ -37,16 +39,18 @@ const handleSearch = async ()=>{
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
+              <RouterLink class="nav-link active" aria-current="page" to="/">Trang Chủ</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink class="nav-link" to='checkout' href="#">Checkout </RouterLink>
+              <RouterLink class="nav-link" to='checkout' href="#">Thanh Toán </RouterLink>
             </li>
           </ul>
           <div className="navbar-nav">
             <div class="input-group mt-2 mt-lg-0">
-              <input type="text" class="form-control" v-model="search"  placeholder="" />
-              <button @click="()=> handleSearch()" class="btn btn-secondary" >Search</button>
+              <input type="text" class="form-control" @keyup.enter="()=> handleSearch()" v-model="search"  placeholder="" />
+              <button @click="()=> handleSearch()"  class="btn btn-secondary" >
+                <font-awesome-icon icon="fa-solid fa-search" />
+              </button>
             </div>
           </div>
           <div v-if="user.userInformation" class="navbar-nav profile_user align-items-center mt-3 mt-lg-0">
@@ -55,11 +59,11 @@ const handleSearch = async ()=>{
                 alt="Avatar" />
                <h6>{{ user.userInformation?.userName }}</h6>
             </RouterLink>
-            <RouterLink to="/" style="height: 40px;" class="btn btn-secondary h" @click="user.logout()">Logout </RouterLink>
+            <RouterLink to="/" style="height: 40px;" class="btn btn-secondary h" @click="user.logout()">Đăng xuất </RouterLink>
           </div>
           <div v-else class="navbar-nav profile_user align-items-center mt-3 mt-lg-0">
-            <RouterLink to="/login" style="height: 40px;" class="btn btn-secondary h">Login </RouterLink>
-            <RouterLink to="/register" style="height: 40px;" class="btn btn-secondary h">Register </RouterLink>
+            <RouterLink to="/login" style="height: 40px;" class="btn btn-secondary h">Đăng Nhập </RouterLink>
+            <RouterLink to="/register" style="height: 40px;" class="btn btn-secondary h">Đăng Ký </RouterLink>
           </div>
 
 

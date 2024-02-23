@@ -10,12 +10,10 @@ const breakpoints = {
         itemsToShow: 2.5,
         snapAlign: 'center',
       },
-      // 700px and up
       700: {
         itemsToShow: 3.5,
         snapAlign: 'center',
       },
-      // 1024 and up
       1024: {
         itemsToShow: 5,
         snapAlign: 'start',
@@ -28,7 +26,6 @@ watchEffect(async ()=>{
 
 })
 
-console.log("list film",film.listFilmUser);
 </script>
 
 <template>

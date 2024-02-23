@@ -20,9 +20,9 @@ onBeforeMount(async ()=>{
 
 
 const handleUpdate = async ()=>{
-    !checkNull(email.value) ? errorEmail.value = "email must is not null" : errorEmail.value = "";
-    !checkNull(userName.value) ? errorUserName.value = "userName must is not null" : errorUserName.value = "";
-    !ValidateEmail (email.value) ? errorEmail.value ="email is invalid" : errorEmail.value =""
+    !checkNull(email.value) ? errorEmail.value = "email không được bỏ trống" : errorEmail.value = "";
+    !checkNull(userName.value) ? errorUserName.value = "userName không được bỏ trống" : errorUserName.value = "";
+    !ValidateEmail (email.value) ? errorEmail.value ="email không tồn tại" : errorEmail.value =""
 
         const data = {
             email: email.value,

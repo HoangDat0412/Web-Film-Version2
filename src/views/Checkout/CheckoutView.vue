@@ -7,10 +7,6 @@ import {useCheckoutStore} from "@/stores/checkout"
 import router from "@/router";
 const checkout = useCheckoutStore()
 const handleSubmit = async ()=>{
-  console.log({
-    bank:bank.value,
-    accountNumber:accountNumber.value,
-  });
   await checkout.createCheckout({
     bank:bank.value,
     accountNumber:accountNumber.value,

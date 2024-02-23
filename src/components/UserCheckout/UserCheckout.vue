@@ -18,6 +18,7 @@ watchEffect(async ()=>{
                         <th scope="col">Số Tài Khoản</th>
                         <th scope="col">Ngân Hàng</th>
                         <th scope="col">Ngày Thanh Toán</th>
+                        <th scope="col">Ngày Hết Hạn</th>
                         <th scope="col">Số Tiền</th>
                     </tr>
                 </thead>
@@ -30,6 +31,9 @@ watchEffect(async ()=>{
 
                         <td>
                             {{item?.createdAt}}
+                        </td>
+                        <td>
+                            {{item?.deadline}}
                         </td>
                         <td>{{item?.moneyPay}}</td>
                     </tr>

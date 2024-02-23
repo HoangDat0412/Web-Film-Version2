@@ -24,16 +24,16 @@ watchEffect(async () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item,index) in user.userList" :key="index">
+          <tr v-for="(item,index) in user?.userList" :key="index">
             <th scope="row">{{ item.id }}</th>
-            <td>{{item.userName}}</td>
-            <td>{{item.email}}</td>
-            <td>{{item.userType}}</td>
+            <td>{{item?.userName}}</td>
+            <td>{{item?.email}}</td>
+            <td>{{item?.userType}}</td>
             <td>
-              <button className='btn btn-danger' @click="()=> user.deleteUser(item.id)">Delete</button>
+              <button className='btn btn-danger' @click="()=> user.deleteUser(item?.id)">Delete</button>
             </td>
             <td>
-              <RouterLink className='btn btn-success' :to="`/user/update/${item.id}`">Update</RouterLink>
+              <RouterLink className='btn btn-success' :to="`/user/update/${item?.id}`">Update</RouterLink>
             </td>
           </tr>
 

@@ -1,5 +1,16 @@
 <script setup>
+import router from '@/router';
+import { useFilmStore } from '@/stores/film';
 
+
+const film = useFilmStore()
+const handleSearch = async (type)=>{
+  console.log(type);
+   await film.searchFilm({
+    name:type
+  })
+  router.push({path:"/search"})
+}
 </script>
 
 <template>
@@ -15,31 +26,28 @@
             <div className="row" style="font-size: 15px;">
               <div className="col-12 col-sm-4 mt-4 mt-sm-0  d-flex justify-content-center">
                 <div>
-                  <h5>Phim Mới</h5>
-                  <p>
-                    Phim Khoa Học</p>
-                  <p>Phim Kinh Dị</p>
-                  <p>Phim Chiếu Rạp</p>
-                  <p>Phim Hình Sự</p>
-                  <p>Phim Hành Động</p>
+                  <h5 class="">Phim Mới</h5>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Khoa Học`)">
+                    Phim Khoa Học</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Kinh Dị`)">Phim Kinh Dị</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Chiếu Rạp`)">Phim Chiếu Rạp</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Hình Sự`)">Phim Hình Sự</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Hành Động`)">Phim Hành Động</button>
                 </div>
               </div>
               <div className="col-12 col-sm-4 mt-4 mt-sm-0  d-flex justify-content-center">
                 <div>
                   <h5>Phim Hay</h5>
-                  <p>
-                    Phim Khoa Học</p>
-                  <p>Phim Âu Mỹ</p>
-                  <p>Phim Hàn Quốc</p>
-                  <p>Phim Trung Quốc</p>
-                  <p>Phim Nhật Bản</p>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Âu Mỹ`)">Phim Âu Mỹ</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Hàn Quốc`)">Phim Hàn Quốc</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Trung Quốc`)">Phim Trung Quốc</button>
+                  <button class="btn d-block text-light" @click="()=> handleSearch(`Nhật Bản`)">Phim Nhật Bản</button>
                 </div>
               </div>
 
               <div className="col-12 col-sm-4 mt-4 mt-sm-0  d-flex justify-content-center">
                 <div> <h5>Thông Tin</h5>
-                  <p>
-                    Liên Hệ </p>
+                  <p><a href="mailto:hoang2011dat@gmail.com">Liên Hệ: hoang2011dat@gmail.com</a></p>
                   <p>Giới Thiệu</p>
                   <p>Điều Khoản</p>
                   <p>Riêng Tư</p>

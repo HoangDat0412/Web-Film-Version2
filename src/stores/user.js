@@ -1,3 +1,4 @@
+import router from "@/router";
 import { service } from "@/service/baseService";
 import { TOKEN } from "@/utils/config";
 import { defineStore } from "pinia";
@@ -5,7 +6,9 @@ import { defineStore } from "pinia";
 export const useUserStore = defineStore("user", {
   state: () => ({
     userLogin: "",
-    userInformation: null,
+    userInformation: {
+      userType:"NO"
+    },
   
     userList:[],
   
@@ -43,6 +46,7 @@ export const useUserStore = defineStore("user", {
           this.userLogin = true;
           localStorage.setItem(TOKEN, result.data.token);
           alert("success")
+          router.push({path:"/",name:"home"})
         }
       } catch (error) {
         console.log(error);
@@ -55,7 +59,6 @@ export const useUserStore = defineStore("user", {
         const result = await service.get(`/user/information`)
         if(result?.status === 200){
           this.userInformation = result.data;
-          console.log("information",result.data);
         }
       } catch (error) {
         console.log(error);
@@ -85,7 +88,6 @@ export const useUserStore = defineStore("user", {
       try {
         const result = await service.get("/user");
         if(result.status === 200){
-          console.log("user list",result.data);
           this.userList = result?.data
         }
       } catch (error) {
@@ -110,7 +112,6 @@ export const useUserStore = defineStore("user", {
       try {
         const result = await service.get(`/user/detail/${id}`)
         if(result.status === 200){
-          console.log("user update",result.data);
           this.userUpdate = result.data
         }
       } catch (error) {

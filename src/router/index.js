@@ -43,7 +43,8 @@ const router = createRouter({
         },
         {
           path:"/search",
-          component:SearchFilm
+          component:SearchFilm,
+          name:"search"
         },
         {
           path: "/profile",
@@ -53,7 +54,7 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      name: 'adminlayout',
+      name: 'adlayout',
       component: AdminLayout,
       children:[
         {
