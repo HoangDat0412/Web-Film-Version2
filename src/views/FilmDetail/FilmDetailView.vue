@@ -11,10 +11,21 @@ const rate = useRateStore()
 const route = useRoute()
 const imgpath = ref("")
 const trailerpath = ref("")
+const rating = ref(0)
+const setRating = async () => {
+  const data = {
+    filmId: route.params.id,
+    rate: rating.value
+  }
+  await rate.setRate(data)
+  console.log("rate", rating.value);
+}
 onBeforeMount(async ()=>{
   await film.setFilmDetail(route.params.id)
   await rate.setTotalPoint(route.params.id)
   await film.setListFilm()
+  rating.value = rate.totalPoint
+
   let img = film.filmDetail?.img ? film.filmDetail.img : "/usr/src/app/public/film/1708399031409-transformers.jpg"
   img = img.slice(img.indexOf("/public"));
   imgpath.value = `${LINKBE}${img}`
@@ -35,15 +46,18 @@ onBeforeMount(async ()=>{
               <main style="height: 100%;">
                 <div class="film_item">
                   <!--  -->
-                  <RouterLink :to="`/watchfilm/${route.params.id}`" class="myui-vodlist__thumb" :style="{ background: 'url(' + imgpath + ')' }">
+                  <div  class="myui-vodlist__thumb" :style="{ background: 'url(' + imgpath + ')' }">
                     <span class="play hidden-xs"></span>
                     <span class="pic-tag pic-tag-top">
                       Full HD
                     </span>
                     <div class="myui-vodlist__detail">
-                      <h3 class="title text-overflow pb-2 pt-2" style="background-color: #dd003f;">Xem Phim</h3>
+                      <!-- <h3 class="title text-overflow pb-2 pt-2" style="background-color: #dd003f;">Xem Phim</h3> -->
+                      <!-- <h3 class="title text-overflow pb-2 pt-2 d-block" style="background-color: #dd003f;">Xem Trailer</h3> -->
+                      <RouterLink :to="`/watchfilm/${route.params.id}`"  class="btn btn-danger" style="width: 50%;">Xem Phim</RouterLink>
+                      <a href="#trailer" class="btn btn-success" style="width: 50%;">Xem Trailer</a>
                     </div>
-                  </RouterLink>
+                  </div>
                 </div>
               </main>
             </div>
@@ -60,14 +74,14 @@ onBeforeMount(async ()=>{
               <span class='me-3' v-for="(i,key)  in film.filmDetail?.actor" :key="key">{{ i?.actorName }}</span>
             </p>
             <h3>Rating (lượt đánh giá : {{ rate?.numberRate }}) </h3>
-            <StarRating :rating="rate.totalPoint" :read-only="true" :increment="0.01" />
+            <StarRating v-model:rating="rating" @update:rating="setRating" :increment="0.5" />
           </div>
 
           <div class="mt-5">
             <h3 style="color: #ff9658;">Nội Dung Chi Tiết</h3>
             <h4 class="mt-4">{{ film.filmDetail?.name }}</h4>
             <p>{{ film.filmDetail?.des }}</p>
-            <h3 class="mt-5" style="color: #ff9658;">Trailer</h3>
+            <h3 class="mt-5" style="color: #ff9658;" id="trailer">Trailer</h3>
             <iframe class="metaframe rptss mt-4" :src="trailerpath"
               frameborder="0" scrolling="no" allow="autoplay; encrypted-media" allowfullscreen="true" width="100%"
               height="350px"></iframe>
@@ -75,7 +89,7 @@ onBeforeMount(async ()=>{
         </div>
       </div>
       <div class="col-0 col-lg-4 trending">
-        <h2 class="mb-2 mt-2">Trending</h2>
+        <h2 class="mb-2 mt-2">Thịnh Hành</h2>
         <hr>
         <div class="mt-4">
           <div v-for="(film, index) in film?.listFilmUser?.slice(0, 10)" :key="index" class="mb-3">

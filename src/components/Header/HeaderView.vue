@@ -29,7 +29,9 @@ const handleSearch = async ()=>{
   <main>
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <RouterLink to="/" class="navbar-brand">ĐẬU PHIM</RouterLink>
+        <RouterLink to="/" class="navbar-brand">
+          <img width="100px" src="../../assets/logofilm.png" alt="">
+        </RouterLink>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon">

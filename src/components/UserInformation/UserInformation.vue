@@ -20,6 +20,7 @@ onBeforeMount(async ()=>{
     await user.getUserInformation()
     await favouriteFilm.getFavouriteFilm()
     await checkout.getUserCheckout()
+    await checkout.getUserCheckoutBitcoin()
   userName.value = user.userInformation?.userName
   email.value =user.userInformation?.email
 })
@@ -97,7 +98,7 @@ onBeforeMount(async ()=>{
             </li>
             <li className="list-group-item text-right">
               <span className="float-left">
-                <strong>Thanh toán: {{ checkout.userCheckoutList.length }}</strong> 
+                <strong>Thanh toán: {{ checkout.userCheckoutList.length + checkout.userCheckoutBitcoinList.length }}</strong> 
               </span>
           
             </li>
@@ -105,7 +106,11 @@ onBeforeMount(async ()=>{
               <span className="float-left">
                 <strong>Tổng tiền: {{ checkout.totalPriceUser }} VND</strong> 
               </span>
-             
+            </li>
+            <li className="list-group-item text-right">
+              <span className="float-left">
+                <strong>Tổng bitcoin: {{ checkout.totalBitcoinUser }} BTC</strong> 
+              </span>
             </li>
           </ul>
                 </div>

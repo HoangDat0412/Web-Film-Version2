@@ -53,7 +53,7 @@ watchEffect(async ()=>{
       </div>
     </div>
     <div class="col-12 col-md-4 trending">
-      <h2 class="mb-2 mt-2">Trending</h2>
+      <h2 class="mb-2 mt-2">Thịnh Hành</h2>
       <hr>
       <div class="mt-4" >
         <div v-for="(film,index) in film?.listFilmUser?.slice(0,7)" :key="index" class="mb-3">

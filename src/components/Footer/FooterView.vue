@@ -18,10 +18,12 @@ const handleSearch = async (type)=>{
     <hr>
     <div className='footer' >
       <div className='container-fluid'>
-        <div className="row" style="gap: 20px;">
-          <div className="col-12">
-            <h3>ĐẬU PHIM</h3>
-          </div>
+        <div className="row mt-5" style="gap: 20px;">
+          <!-- <div className="col-12">
+            <RouterLink to="/" >
+          <img width="100px" src="../../assets/logofilm.png" alt="">
+        </RouterLink>
+          </div> -->
           <div className=' col-12 '>
             <div className="row" style="font-size: 15px;">
               <div className="col-12 col-sm-4 mt-4 mt-sm-0  d-flex justify-content-center">

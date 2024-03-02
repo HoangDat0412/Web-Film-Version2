@@ -5,7 +5,7 @@ import { onBeforeMount } from 'vue';
 const user = useUserStore()
 onBeforeMount(async ()=>{
     await user.getUserInformation()
-    if(user?.userInformation?.userType === "USER" || user?.userInformation?.userType === "CLIENT"){
+    if(user?.userInformation?.userType !== "ADMIN" && user?.userInformation?.userType !== "STAFF" ){
         router.push("/")
     }
 })
@@ -26,10 +26,21 @@ onBeforeMount(async ()=>{
                             id="menu">
                             <li class="nav-item">
                                 <RouterLink to='/admin/user' class="nav-link align-middle px-0">
-                                    <font-awesome-icon icon="fa-solid fa-home" /><span class="ms-1 d-none d-sm-inline">Home</span>
+                                    <font-awesome-icon icon="fa-solid fa-home" /><span class="ms-1 d-none d-sm-inline">Manager User</span>
                                 </RouterLink>
                             </li>
-
+                            <li class="nav-item">
+                                <RouterLink to='/admin/checkout' class="nav-link px-0 align-middle">
+                                    <font-awesome-icon icon="fa-solid fa-money-check" /> <span
+                                        className="ms-1 d-none d-sm-inline">Checkout</span>
+                                </RouterLink>
+                            </li>
+                            <li class="nav-item">
+                                <RouterLink to='/admin/checkoutbitcoin' class="nav-link px-0 align-middle">
+                                    <font-awesome-icon icon="fa-solid fa-money-check" /> <span
+                                        className="ms-1 d-none d-sm-inline">Checkout Bitcoin</span>
+                                </RouterLink>
+                            </li>
                             <li>
                                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                                 <font-awesome-icon icon="fa-solid fa-film" /> <span class="ms-1 d-none d-sm-inline">Film</span> </a>
@@ -45,12 +56,6 @@ onBeforeMount(async ()=>{
                                 </ul>
                             </li>
 
-                            <li>
-                                <RouterLink to='/admin/checkout' className="nav-link px-0 align-middle">
-                                    <font-awesome-icon icon="fa-solid fa-money-check" /> <span
-                                        className="ms-1 d-none d-sm-inline">Checkout</span>
-                                </RouterLink>
-                            </li>
                         </ul>
                     </div>
                 </div>

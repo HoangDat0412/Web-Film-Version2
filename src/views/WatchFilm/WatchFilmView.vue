@@ -23,11 +23,13 @@ watchEffect(async ()=>{
   await user.getUserInformation()
   if(user.userInformation.userType !=="ADMIN" && user.userInformation.userType !=="STAFF" && user.userInformation.userType !=="CLIENT"){
     alert("bạn cần nâng cấp tài khoản để xem phim")
-    router.push("/checkout")
+    router.push({
+      path:"/checkout",
+      replace: true
+    })
   }
 })
 onBeforeMount(async()=>{
-
   await film.setFilmWatching(route.params.id)
   await rate.setTotalPoint(route.params.id)
   await commentStore.getAllComment(route.params.id)
@@ -38,13 +40,9 @@ onBeforeMount(async()=>{
   let src = film.filmWatching?.src ? film.filmWatching?.src : "/usr/src/app/public/film/1708399046429-trailernvbkt.mp4"
   src = src.slice(src.indexOf("/public"));
   srcpath.value = `${LINKBE}${src}`
-
 })
-
-
 const rating = ref(0)
 const comment = ref("")
-
 const handleComment = async () => {
   const flag = checkNull(comment.value)
   if (flag) {
@@ -64,15 +62,14 @@ const setRating = async () => {
   await rate.setRate(data)
   console.log("rate", rating.value);
 }
-
-
 </script>
 
 <template>
   <main>
     <div>
       <iframe class="mt-4" :src="srcpath" frameborder="0" scrolling="no" allow="autoplay; encrypted-media" allowfullscreen="true" width="100%" height="500px"></iframe>
-      <div class="mt-4">
+      <div class="d-flex justify-content-between">
+        <div class="mt-4">
         <h3>Rate (lượt đánh giá : {{ rate?.numberRate }}) </h3>
         <StarRating v-model:rating="rating" @update:rating="setRating" :increment="0.5" />
       </div>
@@ -83,6 +80,7 @@ const setRating = async () => {
           <font-awesome-icon v-if="favouriteFilm.checkFilmIsFavourite" style="font-size: 30px; color: red;" icon="fa-solid fa-heart" />
           <font-awesome-icon v-else style="font-size: 30px; color: white;" icon="fa-solid fa-heart" />
         </button>
+      </div>
       </div>
     </div>
     <div class="row mt-5">
@@ -124,7 +122,7 @@ const setRating = async () => {
         </div>
       </div>
       <div class="col-0 col-lg-4 trending">
-        <h2 class="mb-2 mt-2">Trending</h2>
+        <h2 class="mb-2 mt-2">Thịnh Hành</h2>
         <hr>
         <div class="mt-4">
           <div v-for="(film, index) in film?.listFilmUser?.slice(0, 10)" :key="index" class="mb-3">

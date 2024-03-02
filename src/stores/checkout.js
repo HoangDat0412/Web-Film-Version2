@@ -4,14 +4,17 @@ import { defineStore } from "pinia";
 export const useCheckoutStore = defineStore("checkout", {
   state: () => ({
     checkoutList : [],
+    checkoutBitcoinList:[],
     totalPrice:0,
     checkoutResult : false,
     userCheckoutList:[],
+    userCheckoutBitcoinList:[],
     totalPriceUser : 0,
-    deadline : true
+    totalBitcoinUser:0,
+    deadline : true,
+    vnpayurl:""
   }),
   getters: {
-    
   },
   actions: {
     async createCheckout(data){
@@ -37,7 +40,6 @@ export const useCheckoutStore = defineStore("checkout", {
         const result = await service.get('/checkout/getall')
         if(result?.status === 200){
             this.checkoutList = result.data
-            console.log(result.data,"checkout list");
             let totalmoney = 0;
             result?.data?.map((item)=>{
                totalmoney += item.moneyPay
@@ -53,11 +55,11 @@ export const useCheckoutStore = defineStore("checkout", {
         const result = await service.get(`/checkout`)
         if(result.status === 200){
           this.userCheckoutList = result.data
-          console.log(result.data);
           let totalmoney = 0;
           result?.data?.map((item)=>{
              totalmoney += item.moneyPay
           })
+          console.log("moneyPay",totalmoney);
           this.totalPriceUser = totalmoney
         }
       } catch (error) {
@@ -78,6 +80,62 @@ export const useCheckoutStore = defineStore("checkout", {
       } catch (error) {
         console.log(error);
       }
+    },
+    async createCheckoutBitcoin(data){
+      try {
+        const result = await service.post(`/checkoutbitcoin/create`,data)
+      if (result.status === 201) {
+        this.checkoutResult = true;
+        alert("Check out thành công, bạn hay đăng nhập lại tài khoản !")
+      } else {
+        this.checkoutResult = false
+        alert("Check out thất bại")
+      }
+      } catch (error) {
+        this.checkoutResult = false
+        alert("Check out thất bại")
+      }
+    },
+    async getUserCheckoutBitcoin(){
+      try {
+        const result = await service.get(`/checkoutbitcoin`)
+        if(result.status === 200){
+          this.userCheckoutBitcoinList = result.data
+          let totalmoney = 0;
+          result?.data?.map((item)=>{
+             totalmoney += item.bitcoinprice
+          })
+          this.totalBitcoinUser = totalmoney
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAllCheckoutBitcoin(){
+      try {
+        const result = await service.get('/checkoutbitcoin/getall')
+        if(result?.status === 200){
+            this.checkoutBitcoinList = result.data
+            let totalmoney = 0;
+            result?.data?.map((item)=>{
+               totalmoney += item.moneyPay
+            })
+            this.totalPrice = totalmoney
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    },
+    async paymentvnpay(){
+      try {
+         const result = await service.get('/order/create_payment_url')
+         if(result.status ===200){
+          this.vnpayurl = result.data
+         }
+
+    } catch (error) {
+        console.log(error);
+    }
     }
   },
 });

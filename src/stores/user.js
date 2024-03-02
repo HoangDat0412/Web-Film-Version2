@@ -45,7 +45,6 @@ export const useUserStore = defineStore("user", {
         if(result?.status === 200){
           this.userLogin = true;
           localStorage.setItem(TOKEN, result.data.token);
-          alert("success")
           router.push({path:"/",name:"home"})
         }
       } catch (error) {

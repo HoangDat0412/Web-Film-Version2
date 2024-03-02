@@ -16,6 +16,7 @@ import ManagerCheckout from "../views/ManagerCheckout/ManagerCheckoutView.vue"
 import CreateFilm from "../views/CreateFilm/CreateFilmView.vue"
 import UpdateFilm from "../views/UpdateFilm/UpdateFilmView.vue"
 import UpdateUser from "../views/UpdateUser/UpdateUserView.vue"
+import ManagerCheckoutBitcoin from "../views/ManagerCheckoutBitcoin/ManagerCheckoutBitcoin.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -81,6 +82,10 @@ const router = createRouter({
           path:"/user/update/:id",
           component: UpdateUser,
         },
+        {
+          path:"/admin/checkoutbitcoin",
+          component: ManagerCheckoutBitcoin,
+        }
       ]
     },
     {

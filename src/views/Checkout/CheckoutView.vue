@@ -1,20 +1,50 @@
 <script setup>
 import qr from "@/assets/img/qr.jpg"
 import { ref } from "vue";
-const accountNumber = ref("")
-const bank = ref("")
-import {useCheckoutStore} from "@/stores/checkout"
+// const accountNumber = ref("")
+// const bank = ref("")
+// const errBank = ref("");
+// const errAcc = ref("")
+const walletaddress = ref("");
+const errwalletaddress = ref("")
+const bitcoinprice = ref(0.00001);
+import { useCheckoutStore } from "@/stores/checkout"
 import router from "@/router";
+import { checkNull } from "@/validation/validation";
 const checkout = useCheckoutStore()
-const handleSubmit = async ()=>{
-  await checkout.createCheckout({
-    bank:bank.value,
-    accountNumber:accountNumber.value,
-  })
-  if(checkout.checkoutResult){
-    router.push({path:"/login"})
-  }
+// const handleSubmit = async () => {
+//   !checkNull(bank.value) ? errBank.value = "bank không được bỏ trống" : errBank.value = "";
+//   !checkNull(accountNumber.value) ? errAcc.value = "account number không được bỏ trống" : errAcc.value = "";
+//   const flag = checkNull(bank.value) && checkNull(accountNumber.value)
+//   if (flag) {
+//     await checkout.createCheckout({
+//       bank: bank.value,
+//       accountNumber: accountNumber.value,
+//     })
+//     if (checkout.checkoutResult) {
+//       router.push({ path: "/login" })
+//     }
+//   }
 
+// }
+
+const handlePaymentBitcoin = async () => {
+  !checkNull(walletaddress.value) ? errwalletaddress.value = "walletaddress không được bỏ trống" : errwalletaddress.value = "";
+
+  const flag = checkNull(walletaddress.value)
+  console.log({
+      bitcoinprice:bitcoinprice.value,
+      walletaddress:walletaddress.value
+    });
+  if (flag) {
+    await checkout.createCheckoutBitcoin({
+      bitcoinprice:bitcoinprice.value,
+      walletaddress:walletaddress.value
+    })
+    if (checkout.checkoutResult) {
+      router.push({ path: "/login" })
+    }
+  }
 }
 </script>
 
@@ -22,76 +52,108 @@ const handleSubmit = async ()=>{
   <main>
     <div class="container pt-4 pb-4">
       <h1 class="h3 mb-5">Payment</h1>
-      <form>
-        <div class="row">
-          <div class="col-12 col-lg-9">
-            <div class="accordion-item mb-3">
-              <h2 class="h5 px-4 py-3 accordion-header d-flex justify-content-between align-items-center">
-                <div class="form-check w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#collapseCC"
-                  aria-expanded="false">
-                  <input class="form-check-input" type="radio" name="payment" id="payment1" />
-                  <label class="form-check-label pt-1" htmlFor="payment1">
-                    VN PAY
-                  </label>
-                </div>
-                <span>
-                  <svg width={34} height={25} xmlns="http://www.w3.org/2000/svg">
-                    <g fillRule="nonzero" fill="#333840">
-                      <path
-                        d="M29.418 2.083c1.16 0 2.101.933 2.101 2.084v16.666c0 1.15-.94 2.084-2.1 2.084H4.202A2.092 2.092 0 0 1 2.1 20.833V4.167c0-1.15.941-2.084 2.102-2.084h25.215ZM4.203 0C1.882 0 0 1.865 0 4.167v16.666C0 23.135 1.882 25 4.203 25h25.215c2.321 0 4.203-1.865 4.203-4.167V4.167C33.62 1.865 31.739 0 29.418 0H4.203Z" />
-                      <path
-                        d="M4.203 7.292c0-.576.47-1.042 1.05-1.042h4.203c.58 0 1.05.466 1.05 1.042v2.083c0 .575-.47 1.042-1.05 1.042H5.253c-.58 0-1.05-.467-1.05-1.042V7.292Zm0 6.25c0-.576.47-1.042 1.05-1.042H15.76c.58 0 1.05.466 1.05 1.042 0 .575-.47 1.041-1.05 1.041H5.253c-.58 0-1.05-.466-1.05-1.041Zm0 4.166c0-.575.47-1.041 1.05-1.041h2.102c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042H5.253c-.58 0-1.05-.466-1.05-1.042Zm6.303 0c0-.575.47-1.041 1.051-1.041h2.101c.58 0 1.051.466 1.051 1.041 0 .576-.47 1.042-1.05 1.042h-2.102c-.58 0-1.05-.466-1.05-1.042Zm6.304 0c0-.575.47-1.041 1.051-1.041h2.101c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042h-2.101c-.58 0-1.05-.466-1.05-1.042Zm6.304 0c0-.575.47-1.041 1.05-1.041h2.102c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042h-2.101c-.58 0-1.05-.466-1.05-1.042Z" />
-                    </g>
-                  </svg>
-                </span>
-              </h2>
-              <div id="collapseCC" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment">
-                <div class="accordion-body">
-
-                  <div class="mb-3">
-                    <label class="form-label">Số tài khoản</label>
-                    <input name="accountNumber" class="form-control" v-model="accountNumber" type="text" />
-
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-6">
-                      <div class="mb-3">
-
-                        <label class="form-label">Ngân hàng</label>
-                        <input name="bank" class="form-control" v-model="bank" type="text" />
-
+      <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" @click="()=> checkout.paymentvnpay()" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+              aria-expanded="true" aria-controls="collapseOne">
+              VNPAY
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="row d-flex justify-content-center">
+                <!-- <div class="col-12 col-lg-9">
+                  <div class="accordion-item mb-3">
+                    <div id="collapseCC" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment">
+                      <div class="accordion-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="mb-3">
+                              <label class="form-label">Số tài khoản</label>
+                              <input name="accountNumber" class="form-control" v-model="accountNumber" type="text" />
+                              <p style="color: red;">{{ errAcc }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="mb-3">
+                              <label class="form-label">Ngân hàng</label>
+                              <input name="bank" class="form-control" v-model="bank" type="text" />
+                              <p style="color: red;">{{ errBank }}</p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                </div> -->
+
+                <div class="col-12 col-lg-3 ">
+                  <div class="card position-sticky top-0">
+                    <div class="p-3 bg-light bg-opacity-10">
+                      <h6 class="card-title mb-3">Vip User </h6>
+
+                      <div class='d-flex justify-content-center'>
+                        <img :src="qr" width="70%" alt="" />
+                      </div>
+                      <hr />
+                      <div class="d-flex justify-content-between mb-4 small">
+                        <span>TOTAL</span> <strong class="text-dark">20000 VND</strong>
+                      </div>
+                      <div class="form-check mb-1 small">
+                        <input class="form-check-input" type="checkbox" defaultValue id="tnc" />
+                        <label class="form-check-label" htmlFor="tnc">
+                          I agree to the <a href="#">terms and conditions</a>
+                        </label>
+                      </div>
+                      <a type='button' :href="checkout.vnpayurl" class="btn btn-primary w-100 mt-2">Payment</a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Bitcoin
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <form>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label class="form-label">Địa chỉ ví bitcoin</label>
+                      <input name="accountNumber" class="form-control" v-model="walletaddress" type="text" />
+                      <p style="color: red;">{{ errwalletaddress }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label class="form-label">price</label>
+                      <input name="bank" class="form-control" disabled v-model="bitcoinprice" type="text" />
+                    </div>
+                  </div>
+                </div>
 
-          <div class="col-12 col-lg-3">
-            <div class="card position-sticky top-0">
-              <div class="p-3 bg-light bg-opacity-10">
-                <h6 class="card-title mb-3">Vip User </h6>
-
-                <div class='d-flex justify-content-center'>
-                  <img :src="qr" width="70%" alt="" />
-                </div>
-                <hr />
-                <div class="d-flex justify-content-between mb-4 small">
-                  <span>TOTAL</span> <strong class="text-dark">200000 VND</strong>
-                </div>
-                <div class="form-check mb-1 small">
-                  <input class="form-check-input" type="checkbox" defaultValue id="tnc" />
-                  <label class="form-check-label" htmlFor="tnc">
-                    I agree to the <a href="#">terms and conditions</a>
-                  </label>
-                </div>
-                <button type='button' @click="handleSubmit" class="btn btn-primary w-100 mt-2">Payment</button>
-              </div>
+                <button type='button' @click="handlePaymentBitcoin" class="btn btn-primary w-100 mt-2">Payment</button>
+              </form>
             </div>
           </div>
         </div>
-      </form>
+      </div>
+
+
     </div>
   </main>
 </template>

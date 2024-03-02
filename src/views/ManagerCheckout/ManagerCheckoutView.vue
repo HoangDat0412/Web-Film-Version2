@@ -2,7 +2,7 @@
 import { useCheckoutStore } from '@/stores/checkout';
 import { watchEffect } from 'vue';
 const  checkout = useCheckoutStore()
-
+import moment from 'moment';
 watchEffect(async ()=>{
   await checkout.getAllCheckout()
 })
@@ -17,23 +17,24 @@ watchEffect(async ()=>{
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Email</th>
-            <th scope="col">Account Number</th>
-            <th scope="col">Bank</th>
+            <th scope="col">User ID</th>
+            <th scope="col">Order ID</th>
             <th scope="col">Money Pay</th>
-            <th scope="col">Deadline</th>
             <th scope="col">Create At</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Status</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item,index) in checkout?.checkoutList" :key="index">
                 <th scope="row">{{index +1}}</th>
-                <td>{{item?.email}}</td>
-                <td>{{item?.accountNumber}}</td>
-                <td>{{item?.bank}}</td>
+                <td>{{item?.userId}}</td>
+                <td>{{item?.orderid}}</td>
                 <td>{{item?.moneyPay}}</td>
-                <td>{{item?.deadline}}</td>
-                <td>{{item?.createdAt}}</td>
+                <td>{{moment(item?.createdAt).format('DD-MM-YYYY')}}</td>
+                <td>{{moment(item?.deadline).format('DD-MM-YYYY')}}</td>
+                <td>{{item?.status}}</td>
+
               </tr>
 
         </tbody>
